@@ -5,7 +5,7 @@ uniform vec2 vertices[n_vertices];
 
 const float hit_dist = 1.;
 const float max_steps = 40.;
-const float n_paths = 500.;
+const float n_paths = 400.;
 
 const float gamma = 2.2;
 

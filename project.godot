@@ -13,8 +13,12 @@ config_version=5
 config/name="Isotherms"
 run/main_scene="res://HeatQuadDemo.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
-run/max_fps=10
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=600
+window/size/viewport_height=600
 
 [dotnet]
 
