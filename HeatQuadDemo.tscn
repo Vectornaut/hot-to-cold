@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi1kvsloqnnt2"]
+
+[ext_resource type="Shader" path="res://HeatShader.gdshader" id="1_pux6p"]
+[ext_resource type="Script" path="res://HeatQuad.cs" id="1_toqcf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hmoup"]
+shader = ExtResource("1_pux6p")
+shader_parameter/sides = null
+
+[node name="Root" type="Node2D"]
+
+[node name="HeatQuad" type="Polygon2D" parent="."]
+material = SubResource("ShaderMaterial_hmoup")
+script = ExtResource("1_toqcf")
