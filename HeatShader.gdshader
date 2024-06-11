@@ -9,6 +9,9 @@ const float n_paths = 500.;
 
 const float gamma = 2.2;
 
+// local homogeneous vertex coordinate
+varying vec3 vtx_loc_homog;
+
 // === hash function ===
 
 float hash14(vec4 p4) {
@@ -43,12 +46,15 @@ int side_hit(vec3 v, float path_cnt) {
   return -1 - nearest_side;
 }
 
+void vertex() {
+  vtx_loc_homog = vec3(VERTEX, 1.);
+}
+
 void fragment() {
-  vec3 v = vec3(VERTEX, 1.);
   float hot_hits = 0.;
   float no_hits = 0.;
   for (float path_cnt = 0.; path_cnt < n_paths; ++path_cnt) {
-    int side = side_hit(v, path_cnt);
+    int side = side_hit(vtx_loc_homog, path_cnt);
     if (side < 0) {
       ++no_hits;
       side = -1 - side;

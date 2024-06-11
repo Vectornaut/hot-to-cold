@@ -3,11 +3,15 @@ using System;
 
 public partial class HeatQuad : Polygon2D {
   public override void _Ready() {
+    // move to center of screen
+    Vector2 res = GetViewportRect().Size;
+    Position = 0.5f * res;
+    
     Polygon = new Vector2[] {
-      new Vector2(300, 350),
-      new Vector2(500, 100),
-      new Vector2(700, 250),
-      new Vector2(500, 500)
+      new Vector2(-0.2f * res.X, 0.2f * res.Y),
+      new Vector2(0, -0.4f * res.Y),
+      new Vector2(0.2f * res.X, -0.2f * res.Y),
+      new Vector2(0, 0.4f * res.Y)
     };
     
     // find side distance functions
@@ -23,11 +27,11 @@ public partial class HeatQuad : Polygon2D {
   
   // in homogeneous coordinates, the inner product with this vector gives the
   // signed distance to the given oriented line, with positive distance on the
-  // left side. the line is specified by its start and end points in global
+  // left side. the line is specified by its start and end points in local
   // coordinates
   private Vector3 Side(Vector2 start, Vector2 end) {
     Vector2 dir = start.DirectionTo(end);
     Vector2 normal = new Vector2(-dir.Y, dir.X);
-    return new Vector3(normal.X, normal.Y, -normal.Dot(ToLocal(start)));
+    return new Vector3(normal.X, normal.Y, -normal.Dot(start));
   }
 }
