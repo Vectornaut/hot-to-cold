@@ -5,7 +5,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hmoup"]
 shader = ExtResource("1_pux6p")
-shader_parameter/sides = null
+shader_parameter/vertices = null
 
 [node name="Root" type="Node2D"]
 

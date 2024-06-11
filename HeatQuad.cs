@@ -26,17 +26,11 @@ public partial class HeatQuad : Polygon2D {
       rightHandle.Position,
       new Vector2(0, 0.3f * res.Y)
     };
+    Polygon = _Vertices;
     
-    // find side distance functions
-    _Sides = new Vector3[4];
-    for (int k = 0; k < _Sides.Length; k++) {
-      _Sides[k] = Side(_Vertices[k], _Vertices[(k+1) % _Vertices.Length]);
-    }
-    
-    // save a reference to the shader material
+    // load vertices into shader
     _ShaderMat = this.Material as ShaderMaterial;
-    
-    LoadVerticesAndSides();
+    _ShaderMat.SetShaderParameter("vertices", _Vertices);
   }
   
   // in homogeneous coordinates, the inner product with this vector gives the
@@ -49,23 +43,10 @@ public partial class HeatQuad : Polygon2D {
     return new Vector3(normal.X, normal.Y, -normal.Dot(start));
   }
   
-  // set the vertex array and pass the side equations to shader
-  private void LoadVerticesAndSides() {
-    Polygon = _Vertices;
-    _ShaderMat.SetShaderParameter("sides", _Sides);
-  }
-  
   private void UpdateVertex(int k, Vector2 v) {
-    // update vertex
     _Vertices[k] = v;
-    
-    // update sides
-    int prev = (k + _Vertices.Length - 1) % _Vertices.Length;
-    int next = (k + 1) % _Vertices.Length;
-    _Sides[prev] = Side(_Vertices[prev], _Vertices[k]);
-    _Sides[k] = Side(_Vertices[k], _Vertices[next]);
-    
-    LoadVerticesAndSides();
+    Polygon = _Vertices;
+    _ShaderMat.SetShaderParameter("vertices", _Vertices);
   }
   
   private void OnLeftHandleDrag(Vector2 position) {
