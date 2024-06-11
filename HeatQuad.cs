@@ -29,16 +29,6 @@ public partial class HeatQuad : Polygon2D {
     return _Vertices[k];
   }
   
-  // in homogeneous coordinates, the inner product with this vector gives the
-  // signed distance to the given oriented line, with positive distance on the
-  // left side. the line is specified by its start and end points in local
-  // coordinates
-  private Vector3 Side(Vector2 start, Vector2 end) {
-    Vector2 dir = start.DirectionTo(end);
-    Vector2 normal = new Vector2(-dir.Y, dir.X);
-    return new Vector3(normal.X, normal.Y, -normal.Dot(start));
-  }
-  
   private void UpdateVertex(int k, Vector2 v) {
     _Vertices[k] = v;
     Polygon = _Vertices;
