@@ -36,8 +36,8 @@ public partial class Handle : Node2D {
       }
       _dragging &= evButton.Pressed;
     } else if (ev is InputEventMouseMotion evMotion && _dragging) {
-      this.GlobalPosition = evMotion.Position - _dragOffset;
-      EmitSignal(SignalName.Drag, this.GlobalPosition);
+      GlobalPosition = evMotion.Position - _dragOffset;
+      EmitSignal(SignalName.Drag, GlobalPosition);
     }
   }
 }
