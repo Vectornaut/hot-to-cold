@@ -64,7 +64,6 @@ void vertex() {
 }
 
 void fragment() {
-  /*
   float hot_hits = 0.;
   float no_hits = 0.;
   for (float path_cnt = 0.; path_cnt < n_paths; ++path_cnt) {
@@ -79,7 +78,7 @@ void fragment() {
   float no_hit_frac = no_hits / n_paths;
   vec3 color = mix(vec3(1., 0., 0.), vec3(hot_hit_frac), pow(1. - no_hit_frac, 4.));
   COLOR = vec4(pow(color, vec3(gamma)), 1.);
-  */
+  /* distance test
   vec3 color;
   if (mod(seg_dist(vertex_loc, vertices[0], vertices[1]), 10.) < 5.) {
     color = 0.8 * vec3(1.0, 0.6, 0.8);
@@ -87,4 +86,5 @@ void fragment() {
     color = vec3(1.0, 0.8, 0.9);
   }
   COLOR = vec4(color, 1.);
+  */
 }
