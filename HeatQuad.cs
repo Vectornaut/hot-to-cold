@@ -4,10 +4,10 @@ using System;
 public partial class HeatQuad : Polygon2D {
   public override void _Ready() {
     Polygon = new Vector2[] {
+      new Vector2(300, 350),
       new Vector2(500, 100),
       new Vector2(700, 250),
-      new Vector2(500, 500),
-      new Vector2(300, 350)
+      new Vector2(500, 500)
     };
     
     // find side distance functions
