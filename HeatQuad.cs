@@ -2,6 +2,9 @@ using Godot;
 using System;
 
 public partial class HeatQuad : Polygon2D {
+  private const float LoQualNPaths = 40f;
+  private const float HiQualNPaths = 1200f;
+  
   private Vector2[] _Vertices;
   private Vector3[] _Sides;
   private ShaderMaterial _ShaderMat;
@@ -11,26 +14,23 @@ public partial class HeatQuad : Polygon2D {
     Vector2 res = GetViewportRect().Size;
     Position = 0.5f * res;
     
-    // create vertex handles
-    Handle leftHandle = new Handle(new Vector2(-0.2f * res.X, 0.2f * res.Y));
-    Handle rightHandle = new Handle(new Vector2(0.2f * res.X, -0.2f * res.Y));
-    leftHandle.Drag += OnLeftHandleDrag;
-    rightHandle.Drag += OnRightHandleDrag;
-    AddChild(leftHandle);
-    AddChild(rightHandle);
-    
     // create vertices
     _Vertices = new Vector2[] {
-      leftHandle.Position,
-      new Vector2(0, -0.3f * res.Y),
-      rightHandle.Position,
-      new Vector2(0, 0.3f * res.Y)
+      new Vector2(-0.3f * res.X, 0.1f * res.Y),
+      new Vector2(0, -0.2f * res.Y),
+      new Vector2(0.3f * res.X, -0.1f * res.Y),
+      new Vector2(0, 0.2f * res.Y)
     };
     Polygon = _Vertices;
     
     // load vertices into shader
     _ShaderMat = this.Material as ShaderMaterial;
     _ShaderMat.SetShaderParameter("vertices", _Vertices);
+    _ShaderMat.SetShaderParameter("n_paths", HiQualNPaths);
+  }
+  
+  public Vector2 GetVertex(int k) {
+    return _Vertices[k];
   }
   
   private void UpdateVertex(int k, Vector2 v) {
@@ -39,11 +39,19 @@ public partial class HeatQuad : Polygon2D {
     _ShaderMat.SetShaderParameter("vertices", _Vertices);
   }
   
-  private void OnLeftHandleDrag(Vector2 position) {
+  public void OnLeftHandleDrag(Vector2 position) {
     UpdateVertex(0, ToLocal(position));
   }
   
-  private void OnRightHandleDrag(Vector2 position) {
+  public void OnRightHandleDrag(Vector2 position) {
     UpdateVertex(2, ToLocal(position));
+  }
+  
+  public void OnGrab(bool grabbed) {
+    if (grabbed) {
+      _ShaderMat.SetShaderParameter("n_paths", LoQualNPaths);
+    } else {
+      _ShaderMat.SetShaderParameter("n_paths", HiQualNPaths);
+    }
   }
 }

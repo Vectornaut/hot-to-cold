@@ -13,8 +13,13 @@ config_version=5
 config/name="Isotherms"
 run/main_scene="res://HeatQuadDemo.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
-run/max_fps=10
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=600
+window/size/viewport_height=600
+window/energy_saving/keep_screen_on=false
 
 [dotnet]
 
@@ -24,3 +29,4 @@ project/assembly_name="Isotherms"
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.129412, 0.129412, 0.129412, 1)

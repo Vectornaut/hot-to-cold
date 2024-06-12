@@ -1,13 +1,13 @@
 shader_type canvas_item;
 
+// vertices
 const int n_vertices = 4;
 uniform vec2 vertices[n_vertices];
 
+// render quality
 const float hit_dist = 1.;
 const float max_steps = 40.;
-const float n_paths = 500.;
-
-const float gamma = 2.2;
+uniform float n_paths;
 
 // vertex in local coordinates
 varying vec2 vertex_loc;
@@ -76,8 +76,7 @@ void fragment() {
   }
   float hot_hit_frac = hot_hits / n_paths;
   float no_hit_frac = no_hits / n_paths;
-  vec3 color = mix(vec3(1., 0., 0.), vec3(hot_hit_frac), pow(1. - no_hit_frac, 4.));
-  COLOR = vec4(pow(color, vec3(gamma)), 1.);
+  COLOR = vec4(hot_hit_frac, pow(1. - no_hit_frac, 4.), 0., 1.);
   /* distance test
   vec3 color;
   if (mod(seg_dist(vertex_loc, vertices[0], vertices[1]), 10.) < 5.) {
