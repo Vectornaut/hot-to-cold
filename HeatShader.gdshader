@@ -1,11 +1,13 @@
 shader_type canvas_item;
 
+// vertices
 const int n_vertices = 4;
 uniform vec2 vertices[n_vertices];
 
+// render quality
 const float hit_dist = 1.;
 const float max_steps = 40.;
-const float n_paths = 400.;
+uniform float n_paths;
 
 const float gamma = 2.2;
 

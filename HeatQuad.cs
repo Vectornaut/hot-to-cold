@@ -2,6 +2,9 @@ using Godot;
 using System;
 
 public partial class HeatQuad : Polygon2D {
+  private const float LoQualNPaths = 40f;
+  private const float HiQualNPaths = 1200f;
+  
   private Vector2[] _Vertices;
   private Vector3[] _Sides;
   private ShaderMaterial _ShaderMat;
@@ -23,6 +26,7 @@ public partial class HeatQuad : Polygon2D {
     // load vertices into shader
     _ShaderMat = this.Material as ShaderMaterial;
     _ShaderMat.SetShaderParameter("vertices", _Vertices);
+    _ShaderMat.SetShaderParameter("n_paths", HiQualNPaths);
   }
   
   public Vector2 GetVertex(int k) {
@@ -41,5 +45,13 @@ public partial class HeatQuad : Polygon2D {
   
   public void OnRightHandleDrag(Vector2 position) {
     UpdateVertex(2, ToLocal(position));
+  }
+  
+  public void OnGrab(bool grabbed) {
+    if (grabbed) {
+      _ShaderMat.SetShaderParameter("n_paths", LoQualNPaths);
+    } else {
+      _ShaderMat.SetShaderParameter("n_paths", HiQualNPaths);
+    }
   }
 }

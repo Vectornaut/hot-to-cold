@@ -21,6 +21,8 @@ public partial class HeatQuadDemo : Node2D {
     Handle rightHandle = new Handle(ViewToDisplay(_Quad.ToGlobal(_Quad.GetVertex(2))));
     leftHandle.Drag += OnLeftHandleDrag;
     rightHandle.Drag += OnRightHandleDrag;
+    leftHandle.Grab += OnGrab;
+    rightHandle.Grab += OnGrab;
     AddChild(leftHandle);
     AddChild(rightHandle);
   }
@@ -49,6 +51,11 @@ public partial class HeatQuadDemo : Node2D {
   
   private void OnRightHandleDrag(Vector2 displayPosition) {
     _Quad.OnRightHandleDrag(DisplayToView(displayPosition));
+    _View.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
+  }
+  
+  private void OnGrab(bool grabbed) {
+    _Quad.OnGrab(grabbed);
     _View.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
   }
 }
