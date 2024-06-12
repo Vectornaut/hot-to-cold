@@ -5,8 +5,12 @@ public partial class Handle : Node2D {
   [Signal] public delegate void DragEventHandler(Vector2 position);
   [Signal] public delegate void GrabEventHandler(bool grabbed);
   
+  // size
   private float _Radius;
   private float _RadiusSq;
+  
+  // interaction state
+  private bool _Hovering = false;
   private bool _Grabbed = false;
   private Vector2 _DragOffset;
   
@@ -14,18 +18,37 @@ public partial class Handle : Node2D {
     Position = position;
     _Radius = radius;
     _RadiusSq = radius * radius;
-    
-    // always process
-    ProcessMode = ProcessModeEnum.Always;
+  }
+  
+  private void SetHovering(bool hovering) {
+    _Hovering = hovering;
+    QueueRedraw();
   }
   
   private void SetGrabbed(bool grabbed) {
     _Grabbed = grabbed;
     EmitSignal(SignalName.Grab, grabbed);
+    QueueRedraw();
   }
   
   public override void _Draw() {
-    DrawCircle(Vector2.Zero, _Radius, _Grabbed ? Colors.Red : Colors.Orange);
+    // set colors, mostly around Lab [59, 85], -27, -18
+    Color fill;
+    Color ink;
+    if (_Grabbed) {
+      fill = new Color(196f/255, 251f/255, 253f/255);
+      ink = new Color(133f/255, 239f/255, 254f/255);
+    } else if (_Hovering) {
+      fill = new Color(124f/255, 234f/255, 251f/255);
+      ink = new Color(23f/255, 156f/255, 173f/255);
+    } else {
+      fill = new Color(27f/255, 134f/255, 139f/255);
+      ink = new Color(15f/255, 69f/255, 69f/255);
+    }
+    
+    // draw handle
+    DrawCircle(Vector2.Zero, _Radius, fill);
+    DrawArc(Vector2.Zero, _Radius, 0, Mathf.Tau, 12, ink, 1f, true);
   }
   
   // drag handling, following the Godot mouse motion tutorial
@@ -38,14 +61,19 @@ public partial class Handle : Node2D {
       if (!_Grabbed && evButton.Pressed && locEvPos.LengthSquared() < _RadiusSq) {
         _DragOffset = locEvPos;
         SetGrabbed(true);
-        QueueRedraw();
       } else if (_Grabbed && !evButton.Pressed) {
         SetGrabbed(false);
-        QueueRedraw();
       }
-    } else if (ev is InputEventMouseMotion evMotion && _Grabbed) {
-      GlobalPosition = evMotion.Position - _DragOffset;
-      EmitSignal(SignalName.Drag, GlobalPosition);
+    } else if (ev is InputEventMouseMotion evMotion) {
+      // respond to hovering
+      Vector2 locEvPos = ToLocal(evMotion.Position);
+      SetHovering(locEvPos.LengthSquared() < _RadiusSq);
+      
+      // respond to drag
+      if (_Grabbed) {
+        GlobalPosition = evMotion.Position - _DragOffset;
+        EmitSignal(SignalName.Drag, GlobalPosition);
+      }
     }
   }
 }
