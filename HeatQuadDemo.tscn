@@ -24,7 +24,7 @@ expand_mode = 2
 flip_v = true
 
 [node name="QuadViewport" type="SubViewport" parent="."]
-size = Vector2i(1600, 1600)
+size = Vector2i(1200, 1200)
 render_target_update_mode = 1
 
 [node name="HeatQuad" type="Polygon2D" parent="QuadViewport"]
