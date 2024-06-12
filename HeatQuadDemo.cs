@@ -17,8 +17,10 @@ public partial class HeatQuadDemo : Node2D {
     this._Quad = _View.GetNode("HeatQuad") as HeatQuad;
     
     // create vertex handles
-    Handle leftHandle = new Handle(ViewToDisplay(_Quad.ToGlobal(_Quad.GetVertex(0))));
-    Handle rightHandle = new Handle(ViewToDisplay(_Quad.ToGlobal(_Quad.GetVertex(2))));
+    Vector2 leftVertex = ViewToDisplay(_Quad.ToGlobal(_Quad.GetVertex(0)));
+    Vector2 rightVertex = ViewToDisplay(_Quad.ToGlobal(_Quad.GetVertex(2)));
+    Handle leftHandle = new Handle(leftVertex, _Display);
+    Handle rightHandle = new Handle(rightVertex, _Display);
     leftHandle.Drag += OnLeftHandleDrag;
     rightHandle.Drag += OnRightHandleDrag;
     leftHandle.Grab += OnGrab;

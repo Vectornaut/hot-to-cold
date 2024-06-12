@@ -5,7 +5,8 @@ public partial class Handle : Node2D {
   [Signal] public delegate void DragEventHandler(Vector2 position);
   [Signal] public delegate void GrabEventHandler(bool grabbed);
   
-  // size
+  // geometry
+  private Control _Domain;
   private float _Radius;
   private float _RadiusSq;
   
@@ -14,8 +15,9 @@ public partial class Handle : Node2D {
   private bool _Grabbed = false;
   private Vector2 _DragOffset;
   
-  public Handle(Vector2 position, float radius = 6f) {
+  public Handle(Vector2 position, Control domain, float radius = 6f) {
     Position = position;
+    _Domain = domain;
     _Radius = radius;
     _RadiusSq = radius * radius;
   }
@@ -71,7 +73,10 @@ public partial class Handle : Node2D {
       
       // respond to drag
       if (_Grabbed) {
-        GlobalPosition = evMotion.Position - _DragOffset;
+        Vector2 inset = 0.5f * new Vector2(_Radius, _Radius);
+        Vector2 minPos = _Domain.Position + inset;
+        Vector2 maxPos = _Domain.Position + _Domain.Size - inset;
+        GlobalPosition = (evMotion.Position - _DragOffset).Clamp(minPos, maxPos);
         EmitSignal(SignalName.Drag, GlobalPosition);
       }
     }
